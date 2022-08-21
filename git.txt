@@ -1,0 +1,194 @@
+git init				在当前目录新建一个 Git 代码库
+git clone				下载一个项目和它的整个代码历史
+
+	2.配置
+Git 的设置文件为.gitconfig，它可以在用户主目录下（全局配置），也可以在项目目录下（项目配置）。
+	
+git config user.name [name]  		2.1设置提交代码时的用户信息
+git config user.email [email]
+	
+git config --list 			2.3显示当前的 Git 配置
+cat ~/.gitconfig			2.4显示当前的 Git 配置
+
+	3.增加/删除文件
+
+git add [file1] [file2] ... 		3.1添加指定文件到暂存区
+git add [dir]			3.2添加指定目录到暂存区，包括子目录
+git add .				3.3添加当前目录的所有文件到暂存区
+git rm 1.txt 2.txt			3.4删除工作区文件，并且将这次删除放入暂存区
+git rm -fr 1.txt			3.4.1直接删除文件
+git rm --cached 1.txt 2.txt		3.4.2停止追踪指定文件，但该文件会保留在工作区
+git mv [file-original] [file-renamed]	3.5改名文件，并且将这个改名放入暂存区
+
+	4.代码提交
+
+git commit -m [message]		4.1提交暂存区到仓库区
+git commit [file1] [file2] ... -m [message]	4.2提交暂存区的指定文件到仓库区
+git commit -a -m			4.3提交工作区自上次 commit 之后的变化，直接到仓库区
+git commit -v -m			4.4提交时显示所有 diff 信息
+
+	5.分支
+
+git branch				5.1列出所有本地分支	*表示当前分支
+git branch -r			5.2列出所有远程分支
+git branch -a			5.3列出所有本地分支和远程分支
+git branch [branch-name]		5.4新建一个分支，但依然停留在当前分支
+git checkout -b [branch]		5.5新建一个分支，并切换到该分支
+	5.6新建一个分支，指向指定 commit
+git log				5.6.1查看提交的日志
+git branch [branch] [commit]		5.6.2新建一个分支，指向指定 commit ID
+git branch --track [branch1] [branch2]	5.7新建一个分支，与指定的本地分支建立追踪关系
+git checkout [branch-name]		5.8.1切换到建立追踪的分支DevOps_RC1
+git checkout DevOps_RC1
+git pull				5.8.2从建立追踪的分支拉取最新的变化
+	5.9新建一个分支，与指定的远程分支建立追踪关系
+git push -u origin *:*			5.9.1将本地的所有分支及信息全部推送到远程仓库
+git remote -v			5.9.2查看origin信息
+git branch --track [branch] [remote branch]5.9.3新建一个分支，与指定的远程分支建立追踪关系
+git checkout DevOps_RC2		5.9.4切换到建立追踪关系的新分支DevOps_RC2
+git merge [branch]			5.10合并指定分支到当前分支
+	提示文件存在冲突，冲突解决后再提交
+	5.10.1解决合并产生的冲突
+vim Readme.md			按照冲突提示，修改冲突文件 Readme.md
+	5.10.2编辑修改解决冲突
+git cherry-pick [commit]		5.11选择一个 commit，合并进当前分支
+git log				5.11.1选择别的分支（DevOps_RC1）的一个commit
+	5.11.2切换到另一个项目合并一个提交至此分支的分支
+git checkout DevOps_Dev		5.11.2.1切换分支（DevOps_Dev）
+git cherry-pick 900d39d3		5.11.2.2将选定的commit，合并进当前分支
+git status				5.11.2.3查看当前状态
+git branch -d [branch-name]		5.12删除分支
+	5.13删除远程分支
+git branch -av			5.13.1查看当前分支的详细信息
+git branch -r			8.8.2查看当前的远程分支
+git push origin --delete DevOps_RC2	5.13.2删除远程分支
+git branch -dr remotes/origin/DevOps_RC15.13.3 删除远程分支
+
+	6.标签
+
+git tag				6.1列出所有 tag
+git tag [tag]			6.2新建一个 tag 在当前 commit
+ git show [tag]			6.5查看 tag 信息
+git push [remote] [tag]		6.6提交指定 tag到远程仓库
+git push [remote] --tags		6.7提交所有 tag
+git checkout -b [branch] [tag]		6.8基于某个tag创建分支并切换至该分支
+
+	7.查看信息
+git status				7.1显示有变更的文件
+git log				7.2显示当前分支的版本历史
+git log --stat			7.3显示 commit 历史，以及每次 commit 发生变更的文件
+git log --follow [file]			7.4显示某个文件的版本历史，包括文件改名
+git log -p [file]			7.5显示指定文件相关的每一次 diff
+git blame [file]			7.6显示指定文件是什么人在什么时间修改过
+git diff --cached []			7.7显示暂存区和上一个 commit 的差异
+git diff HEAD			7.8显示工作区与当前分支最新 commit 之间的差异
+git diff [first-branch]...[second-branch]	7.9显示两个分支之间的差异
+git diff 304db4dfdd ab794ed848	7.10显示两次commit之间的差异
+git show [commit]			7.11显示某次提交的元数据和内容变化
+git show --name-only [commit]		7.12显示某次提交发生变化的文件
+git show [commit]:[filename]		7.13显示某次提交时，某个文件的内容
+git reflog				7.14显示所有的提交
+
+	8.远程同步
+git fetch [remote]	 git fetch origin	8.1拉取远程仓库的所有变动
+git remote -v			8.2显示所有远程仓库
+git remote show [remote]		8.3显示某个远程仓库的信息		git remote show origin
+git remote add [shortname] [url]	8.4增加一个新的远程仓库，并命名	git remote add DevOps_MaTest http://192.168.145.89/devops/devops_matest.git
+git pull [remote] [branch]		8.5取回远程仓库另一分支的变化，并与本地分支进行合并
+cat Readme.md			8.5.1合并之前DevOps_RC1文件信息展示
+git push origin DevOpug:DevOps_V0	8.5.3将修改推送到远程仓库
+git checkout DevOps_RC1		8.5.4切换至要拉取此分支的分支
+git pull origin DevOps_V0.3FixBug	8.5.6拉取另一分支的最新变化至本地的当前分支
+git push [remote] --force		8.7强行推送当前分支到远程仓库，即使有冲突	git push origin DevOps_RC1:DevOps_Dev --force
+push [remote] --all			8.8推送所有分支到远程仓库
+git push origin --all			8.8.3 推送所有新建分支到远程仓库
+	9.撤销
+git checkout [commit]		9.1版本回滚
+git switch -c temp			9.2基于当前的commit 创建分支并进行跳转
+git reset --hard			9.3重置暂存区与工作区，与上一次 commit 保持一致
+git reset [commit]			9.4重置当前分支的指针为指定 commit，同时重置暂存区，但工作区不变
+git reset --hard [commit]		9.5重置当前分支的 HEAD 为指定 commit，同时重置暂存区和工作区，与指定 commit 一致
+git reset --keep [commit]		9.6重置当前 HEAD 为指定 commit，但保持暂存区和工作区不变
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
